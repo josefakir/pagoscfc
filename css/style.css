@@ -1,0 +1,13 @@
+.center{width: 100px; margin: 0 auto; display: block;}
+.logohome{margin-top: 100px}
+.tac{text-align: center;}
+.error{color: red}
+header{width: 100%; position: fixed; height: 50px; background: #5897fc}
+a#triggermenu {
+    color: #fff;
+    font-size: 26px;
+    float: right;
+    margin-top: 5px;
+}
+#logo img{max-height: 50px}
+#content{padding-top: 70px}
