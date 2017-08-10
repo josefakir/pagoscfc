@@ -34,18 +34,15 @@
 				<input type="image" src="https://www.paypalobjects.com/es_XC/MX/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal, la forma más segura y rápida de pagar en línea.">
 				<img alt="" border="0" src="https://www.paypalobjects.com/es_XC/i/scr/pixel.gif" width="1" height="1">
 				</form>-->
-				SANDBOX
+				<!--SANDBOX
 				
 				<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">
 
-			    <!-- Identify your business so that you can collect the payments. -->
 			    <input type="hidden" name="business"
 			        value="compirrisfc@gmail.com">
 
-			    <!-- Specify a Donate button. -->
 			    <input type="hidden" name="cmd" value="_donations">
 
-			    <!-- Specify details about the contribution -->
 			    <input type="hidden" name="item_name" value="Compirris FC">
 			    <input type="hidden" name="item_number" value="Pago de mensualidad">
 			    <input type="hidden" name="currency_code" value="MXN">
@@ -53,14 +50,78 @@
 				<input type="hidden" name="amount" value="1">
 
 
-			    <!-- Display the payment button. -->
 			    <input type="image" name="submit"
 			    src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_92x26.png"
 			    alt="Donate">
 			    <img alt="" width="1" height="1"
 			    src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
 
-			</form>
+			</form>-->
+
+   <div id="paypal-button-container">
+   	<input type="number" name="cantidad" id="cantidad" style="float: left;" placeholder="Cantidad">
+   </div>
+	<script>
+		var cantidad = 0;
+		$(document).ready(function(e){
+			$('#cantidad').blur(function() {
+				cantidad = $('#cantidad').val();
+			});
+		})
+	</script>
+    <script>
+        paypal.Button.render({
+        	locale: 'es_MX',
+
+	        style: {
+	            size: 'small',
+	            shape: 'pill',
+	            label: 'checkout'
+	        },
+            env: 'sandbox', // sandbox | production
+
+            // PayPal Client IDs - replace with your own
+            // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+            client: {
+                sandbox:    'AYxend_HS-NWFRyCz3f9tfVBIt098C8WgNMnfMXG3l8gJP-192YQzu3iw9-QycmaudBrO-7FZ79L8xVi',
+                production: '<insert production client id>'
+            },
+
+            // Show the buyer a 'Pay Now' button in the checkout flow
+            commit: true,
+
+            // payment() is called when the button is clicked
+            payment: function(data, actions) {
+
+                // Make a call to the REST api to create the payment
+                return actions.payment.create({
+                    payment: {
+                        transactions: [
+                            {
+                                amount: { total: cantidad, currency: 'MXN' }
+                            }
+                        ]
+                    }
+                });
+            },
+
+            // onAuthorize() is called when the buyer approves the payment
+            onAuthorize: function(data, actions) {
+
+                // Make a call to the REST api to execute the payment
+                return actions.payment.execute().then(function() {
+                	console.log(data);
+                	console.log(cantidad);
+                    window.alert('El pago se ha completado!');
+                });
+            },
+            onError: function(err) {
+            	console.log(err);
+	        }
+
+        }, '#paypal-button-container');
+
+</script>
 
 			</div>
 		</div>
